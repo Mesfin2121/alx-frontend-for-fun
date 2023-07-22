@@ -26,6 +26,17 @@ if __name__ == '__main__':
                 line = line.replace('**', '</b>', 1)
                 line = line.replace('__', '<em>', 1)
                 line = line.replace('__', '</em>', 1)
+                md5_char = re.findall(r'\[\[.+?\]\]', line)
+                md5_char_in = re.findall(r'\[\[(.+?)\]\]', line)
+                if md5_char:
+                    line = line.replace(md5_char[0], hashlib.md5(
+                        md5_char_in[0].encode()).hexdigest())
+                remove_char_c = re.findall(r'\(\(.+?\)\)', line)
+                remove_c = re.findall(r'\(\((.+?)\)\)', line)
+                if remove_char_c:
+                    remove_c = ''.join(
+                        c for c in remove_c[0] if c not in 'Cc')
+                    line = line.replace(remove_char_c[0], remove_c)
                 length = len(line)
                 cheadings = line.lstrip('#')
                 cheading_num = length - len(cheadings)
