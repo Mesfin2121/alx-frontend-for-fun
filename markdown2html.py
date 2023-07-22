@@ -20,6 +20,7 @@ if __name__ == '__main__':
         with open(sys.argv[2], 'w') as html:
             startUnordered = False
             startOrdered = False
+            paragraph = False
             for line in read:
                 length = len(line)
                 cheadings = line.lstrip('#')
@@ -48,6 +49,16 @@ if __name__ == '__main__':
                 if startOrdered and not cordered_num:
                     html.write('</ol>\n')
                     startOrdered = False
+                
+                if not (cheading_num or startUnordered or startOrdered):
+                    if not paragraph and length > 1:
+                        html.write('<p>\n')
+                        paragraph = True
+                    elif length > 1:
+                        html.write('<br/>\n')
+                    elif paragraph:
+                        html.write('</p>\n')
+                        paragraph = False
 
                 if length > 1:
                     html.write(line)
@@ -55,4 +66,6 @@ if __name__ == '__main__':
                 html.write('</ul>\n')
             if startOrdered:
                 html.write('</ol>\n')
+            if paragraph:
+                html.write('</p>\n')
     exit (0)
