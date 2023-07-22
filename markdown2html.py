@@ -19,12 +19,15 @@ if __name__ == '__main__':
     with open(sys.argv[1]) as read:
         with open(sys.argv[2], 'w') as html:
             startUnordered = False
+            startOrdered = False
             for line in read:
                 length = len(line)
                 cheadings = line.lstrip('#')
                 cheading_num = length - len(cheadings)
                 cunordered = line.lstrip('-')
                 cunordered_num = length - len(cunordered)
+                cordered = line.lstrip('*')
+                cordered_num = length - len(cordered)
                 if 1 <= cheading_num <= 6:
                     line = '<h{}>'.format(
                         cheading_num) + cheadings.strip() + '</h{}>\n'.format(
@@ -37,9 +40,19 @@ if __name__ == '__main__':
                 if startUnordered and not cunordered_num:
                     html.write('</ul>\n')
                     startUnordered = False
+                if cordered_num:
+                    if not startOrdered:
+                        html.write('<ol>\n')
+                        startOrdered = True
+                    line = '<li>' + cordered.strip() + '</li>\n'
+                if startOrdered and not cordered_num:
+                    html.write('</ol>\n')
+                    startOrdered = False
 
                 if length > 1:
                     html.write(line)
             if startUnordered:
                 html.write('</ul>\n')
+            if startOrdered:
+                html.write('</ol>\n')
     exit (0)
