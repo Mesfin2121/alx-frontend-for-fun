@@ -18,14 +18,28 @@ if __name__ == '__main__':
         exit(1)
     with open(sys.argv[1]) as read:
         with open(sys.argv[2], 'w') as html:
+            startUnordered = False
             for line in read:
                 length = len(line)
                 cheadings = line.lstrip('#')
                 cheading_num = length - len(cheadings)
+                cunordered = line.lstrip('-')
+                cunordered_num = length - len(cunordered)
                 if 1 <= cheading_num <= 6:
                     line = '<h{}>'.format(
                         cheading_num) + cheadings.strip() + '</h{}>\n'.format(
                         cheading_num)
+                if cunordered_num:
+                    if not startUnordered:
+                        html.write('<ul>\n')
+                        startUnordered = True
+                    line = '<li>' + cunordered.strip() + '</li>\n'
+                if startUnordered and not cunordered_num:
+                    html.write('</ul>\n')
+                    startUnordered = False
+
                 if length > 1:
                     html.write(line)
+            if startUnordered:
+                html.write('</ul>\n')
     exit (0)
