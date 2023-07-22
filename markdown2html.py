@@ -22,6 +22,10 @@ if __name__ == '__main__':
             startOrdered = False
             paragraph = False
             for line in read:
+                line = line.replace('**', '<b>', 1)
+                line = line.replace('**', '</b>', 1)
+                line = line.replace('__', '<em>', 1)
+                line = line.replace('__', '</em>', 1)
                 length = len(line)
                 cheadings = line.lstrip('#')
                 cheading_num = length - len(cheadings)
