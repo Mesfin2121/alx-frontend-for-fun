@@ -16,4 +16,16 @@ if __name__ == '__main__':
     if not os.path.isfile(sys.argv[1]):
         print('Missing {}'.format(sys.argv[1]), file=sys.stderr)
         exit(1)
+    with open(sys.argv[1]) as read:
+        with open(sys.argv[2], 'w') as html:
+            for line in read:
+                length = len(line)
+                cheadings = line.lstrip('#')
+                cheading_num = length - len(cheadings)
+                if 1 <= cheading_num <= 6:
+                    line = '<h{}>'.format(
+                        cheading_num) + cheadings.strip() + '</h{}>\n'.format(
+                        cheading_num)
+                if length > 1:
+                    html.write(line)
     exit (0)
